@@ -1,0 +1,9 @@
+
+Package: *
+Pin: release o=WinsLinux, n=alpha
+Pin-Priority: 990
+
+
+Package: *
+Pin: release o=WinsLinux, n=alpha
+Pin-Priority: 700

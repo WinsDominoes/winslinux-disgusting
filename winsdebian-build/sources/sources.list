@@ -1,0 +1,3 @@
+# Main
+deb http://deb.winscloud.net/winslinux alpha main
+deb-src http://deb.winscloud.net/winslinux alpha main

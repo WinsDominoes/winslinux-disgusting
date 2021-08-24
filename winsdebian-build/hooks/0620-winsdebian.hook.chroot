@@ -1,0 +1,66 @@
+#!/bin/bash
+
+rm -f /etc/os-release
+cat <<EOT >> /etc/os-release
+PRETTY_NAME="Win's Linux GNU/Linux 0.0.3 (alpha)"
+NAME="Win's Linux GNU/Linux"
+VERSION_ID="0.0.3"
+VERSION="0.0.3 (alpha)"
+VERSION_CODENAME=alpha
+ID=winsdebian
+HOME_URL="https://winslinux.winscloud.net/"
+SUPPORT_URL="https://winslinux.winscloud.net/support/"
+BUG_REPORT_URL="https://winslinux.winscloud.net/bugs/"
+EOT
+chattr +i /etc/os-release
+
+rm -f /usr/lib/os-release
+cat <<EOT >> /etc/os-release
+PRETTY_NAME="Win's Linux GNU/Linux 0.0.3 (alpha)"
+NAME="Win's Linux GNU/Linux"
+VERSION_ID="0.0.3"
+VERSION="0.0.3 (alpha)"
+VERSION_CODENAME=alpha
+ID=winsdebian
+HOME_URL="https://winslinux.winscloud.net/"
+SUPPORT_URL="https://winslinux.winscloud.net/support/"
+BUG_REPORT_URL="https://winslinux.winscloud.net/bugs/"
+EOT
+chattr +i /usr/lib/os-release
+
+rm -f /etc/issue
+cat <<EOT >> /etc/issue
+WinsLinux GNU/Linux 0.0.3 \n \l
+EOT
+chattr +i /etc/issue
+
+rm -f /etc/issue.net
+cat <<EOT >> /etc/issue.net
+WinsLinux GNU/Linux 0.0.3
+EOT
+chattr +i /etc/issue.net
+
+rm -f /etc/motd
+cat <<EOT >> /etc/motd
+The programs included with WinsLinux are free software
+
+WinsLinux comes with ALSOLUTELY NO WARRANTRY, to the extent premitted by applicable law. 
+EOT
+chattr +i /etc/motd
+
+rm -f /etc/apt/sources.list
+cat <<EOT >> /etc/apt/sources.list
+## WinsLinux Stable package repository
+
+deb http://deb.winscloud.net/winslinux alpha main
+EOT
+chattr +i /etc/motd
+
+rm -f /etc/debian-version
+cat <<EOT >> /etc/debian_version
+alpha
+0.0.3
+EOT
+
+wget -O - http://deb.winscloud.net/winslinux/winslinux.gpg.key | apt-key add -
+

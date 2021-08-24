@@ -1,0 +1,124 @@
+#!/bin/bash
+#
+# Modified by:
+# bldwinsdebian -- Revision: 1 -- by winsdominoes (https://github.com/WinsDominoes/winsdebian)
+# 
+# Originally created by: 
+# bldeznix109 -- Revision: 109r1 -- by eznix (https://sourceforge.net/projects/eznixos/)
+#
+# (GNU/General Public License version 3.0)
+#
+# Step by Step Live-Build
+#
+#
+# ~/winsdebian-output -- build folder
+# ~/winsdebian-build  -- files location
+#
+#
+# Phase 1: - Assign WKDIR variable the output of pwd
+#
+WKDIR="$(pwd)"
+#
+#
+# Phase 2: - Create the build staging folder
+#
+mkdir winsdebian-output
+#
+cd winsdebian-output
+#
+#
+# Phase 3: - Set up build environment
+#
+lb config \
+--binary-images iso-hybrid \
+--bootappend-live "boot=live components hostname=winslinux username=live" \
+--mode debian \
+--architectures amd64 \
+--linux-flavours amd64 \
+--mirror-binary http://deb.debian.org/debian/ \
+--distribution bullseye \
+--archive-areas "main" \
+--updates false \
+--security false \
+--cache false \
+--cache-indices false \
+--cache-packages false \
+--apt-indices false \
+--apt-source-archives false \
+--debian-installer live \
+--debian-installer-gui false \
+--win32-loader false \
+--interactive shell \
+--iso-application winsdebian-output \
+--iso-preparer winsdominoes-https://winscloud.net \
+--iso-publisher winsdominoes-https://winscloud.net \
+--iso-volume winsdebian-output
+#
+#
+# Phase 4: - Install applications
+#
+echo curl wget nano vim net-tools iptables neofetch gnupg micro > $WKDIR/winsdebian-output/config/package-lists/packages.list.chroot
+#
+echo grub-common grub2-common grub-pc-bin efibootmgr grub-efi-amd64 grub-efi-amd64-bin grub-efi-amd64-signed grub-efi-ia32-bin libefiboot1 libefivar1 mokutil shim-helpers-amd64-signed shim-signed-common shim-unsigned > $WKDIR/winsdebian-output/config/package-lists/grubuefi.list.binary
+#
+#
+# Uncomment below line include Broadcom wireless drivers
+# echo b43-fwcutter firmware-b43-installer firmware-b43legacy-installer  > $WKDIR/winsdebian-output/config/package-lists/wifidrivers.list.chroot
+#
+# Uncomment below line for calamares installer
+# echo calamares calamares-settings-debian > $WKDIR/winsdebian-output/config/package-lists/calamares.list.chroot
+#
+#
+# Phase 5: - Make folders in the chroot
+#
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/usr/share/winsdebian-output
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/etc/skel/.config
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/usr/local/bin
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/usr/share/applications
+mkdir -p $WKDIR/winsdebian-output/config/hooks/normal
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/usr/share/doc/winsdebian-output
+mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/etc/apt/
+#
+# Uncomment below line for calamares installer
+# mkdir -p $WKDIR/winsdebian-output/config/includes.chroot/etc/calamares/branding
+#
+#
+# Phase 6: - Copy files into the chroot
+#
+cp -r $WKDIR/winsdebian-build $WKDIR/winsdebian-output/config/includes.chroot/usr/share/winsdebian-output/winsdebian-build
+cp -r $WKDIR/winsdebian-build/bootloaders $WKDIR/winsdebian-output/config/bootloaders
+cp $WKDIR/winsdebian-build/hooks/* $WKDIR/winsdebian-output/config/hooks/normal/
+cp $WKDIR/winsdebian-build/scripts/* $WKDIR/winsdebian-output/config/includes.chroot/usr/local/bin/
+cp $WKDIR/winsdebian-build/doc/* $WKDIR/winsdebian-output/config/includes.chroot/usr/share/doc/winsdebian-output/
+## copies the apt sources
+cp $WKDIR/winsdebian-build/sources/* $WKDIR/winsdebian-output/config/includes.chroot/etc/apt/
+#
+# Uncomment below line IF you wish to include deb packages from misc64 folder
+# cp $WKDIR/winsdebian-build/misc64/* $WKDIR/winsdebian-output/config/packages.chroot/
+#
+#
+# Phase 7: - Start the build process
+#
+lb build
+#lb clean
+#echo "CLEANED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#lb bootstrap
+#echo "BOOTSTRAPPED!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#echo "CHROOTING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#lb chroot >> test/logs.txt
+#echo "DONE CHROOT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+#lb binary
+#lb source
+#
+# Disclaimer from the original creator:
+#
+# THIS SOFTWARE IS PROVIDED BY EZNIX “AS IS” AND ANY EXPRESS OR IMPLIED
+# WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+# MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
+# EVENT SHALL EZNIX BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+# EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+# PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR
+# BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
+# IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+# ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+# POSSIBILITY OF SUCH DAMAGE.
